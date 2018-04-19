@@ -8,6 +8,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+//initialize the database with starting information
 $conn->query("CREATE DATABASE IF NOT EXISTS premergency352"); 
 
 mysqli_select_db($conn,"premergency352");
