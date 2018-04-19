@@ -1,0 +1,137 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Course Selection</title>
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="album.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  </head>
+
+  <body ng-app="AApp" ng-controller="ACtrl">
+
+    <header>
+    </header>
+
+    <main role="main">
+
+      <section class="jumbotron text-center" ng-include="'header.html'">
+      </section>
+
+      <selection class="jumbotron text-center">
+        <h3>Add Courses</h3>
+      </selection>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+
+        <div class="form-group mx-sm-3 mb-2">
+          <label for="inputMonth" class="sr-only">Month</label>
+          <input type="month" class="form-control" id="inputMonth" placeholder="Pick Month" ng-model="month" ng-change="updateMonth()" ng-cloak>
+        </div>
+        <hr>
+        <p>Select up to four courses</p>
+        <form class="form-control" method="POST" action="add_course.php">
+        <div class="form-group" ng-repeat="tak in taken">
+          <label class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1" ng-cloak>{{ tak.title }}</h5>
+              <small ng-cloak>{{ tak.time }}h</small>
+            </div>
+          </label>
+          <input name="tosend" type="hidden" value="{{ toSend }}">
+          <input name="monthsent" type="hidden" value="{{ monthSent }}">
+        </div>
+        <div class="form-group" ng-if="taken.length > 0">
+          <button type="submit" class="btn btn-sm btn-outline-secondary" ng-click="registerCourse()">Add these Courses</button>
+        </div>
+        </form>
+        <hr/>
+          <div class="row">
+            <div class="col-md-4" ng-repeat="course in filtered">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src="{{ course.image }}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="mb-1" ng-cloak>{{ course.title }}</h5>
+                  <p class="card-text" ng-cloak>{{ course.body }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary" ng-click="pick($index)">Add</button>
+                    </div>
+                    <small class="text-muted" ng-cloak>{{ course.time }}h</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <script>
+      var app = angular.module('AApp', []);
+      app.controller('ACtrl', function($scope, $http) {
+        $scope.courses = [];
+        $scope.taken = [];
+        $scope.filtered = [];
+        $scope.now = new Date();
+        $scope.month = new Date(($scope.now.getFullYear())+"-"+($scope.now.getMonth()+1));
+        $scope.monthSent = "";
+
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+
+        $scope.monthSent = monthNames[$scope.month.getMonth()];
+
+        //load courses available
+        $http.get("courses_list.php")
+          .then(function (response) {
+            $scope.courses = response.data.records;
+            $scope.filtered = $scope.courses.slice();
+          });
+
+        //load user information
+        $http.get("user.php")
+          .then(function (response) {
+            $scope.user = response.data.records[0];
+            $scope.userdata = [];
+            $scope.userdata['name'] = $scope.user.name;
+            $scope.userdata['email'] = $scope.user.email;
+            $scope.userdata['date'] = $scope.user.date;
+            $scope.userdata['gender'] = $scope.user.gender;
+            $scope.userdata['status'] = $scope.user.status;
+            $scope.userdata['bio'] = $scope.user.bio;
+          });
+
+        // select the courses to take
+        $scope.pick = function(index) {
+          if($scope.taken.length <= 3) {
+            $scope.taken.push($scope.filtered[index]);
+            $scope.filtered.splice(index, 1);
+          }
+        };
+
+        $scope.updateMonth = function() {
+          $scope.monthSent = monthNames[$scope.month.getMonth()];
+        }
+
+        $scope.registerCourse = function() {
+          $scope.toSend = [];
+          for(i=0;i<$scope.taken.length;i++) {
+            $scope.toSend.push($scope.taken[i]['id']);
+          }
+        };
+      });
+    </script>
+
+  </body>
+</html>
