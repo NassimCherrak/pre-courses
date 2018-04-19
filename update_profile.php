@@ -29,7 +29,7 @@ $conn->close();
 
     <!-- Bootstrap core CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="album.css" rel="stylesheet">
+    <link href="css/album.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   </head>
 
@@ -58,9 +58,17 @@ $conn->close();
       app.controller('ACtrl', function($scope, $http) {
         $scope.user = [];
 
-        $http.get("user.php")
+        //load user information
+        $http.get("php/user.php")
           .then(function (response) {
             $scope.user = response.data.records[0];
+            $scope.userdata = [];
+            $scope.userdata['name'] = $scope.user.name;
+            $scope.userdata['email'] = $scope.user.email;
+            $scope.userdata['date'] = $scope.user.date;
+            $scope.userdata['gender'] = $scope.user.gender;
+            $scope.userdata['status'] = $scope.user.status;
+            $scope.userdata['bio'] = $scope.user.bio;
           });
 
       });

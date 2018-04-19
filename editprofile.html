@@ -12,7 +12,7 @@
 
     <!-- Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="album.css" rel="stylesheet">
+    <link href="css/album.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   </head>
 
@@ -101,7 +101,7 @@
         $scope.user = [];
 
         // load user information
-        $http.get("user.php")
+        $http.get("php/user.php")
           .then(function (response) {
             $scope.user = response.data.records[0];
             $scope.userdata = [];
