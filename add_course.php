@@ -1,6 +1,6 @@
 <?php
 
-$conn = new mysqli("localhost", "root", "", "angusql");
+$conn = new mysqli("localhost", "root", "", "premergency352");
 
 $display = "";
 
@@ -35,8 +35,7 @@ $conn->close();
 ?>
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -47,7 +46,7 @@ $conn->close();
 
     <title>Edit my Courses</title>
 
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/album.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -83,12 +82,12 @@ $conn->close();
           .then(function (response) {
             $scope.user = response.data.records[0];
             $scope.userdata = [];
-            $scope.userdata['name'] = $scope.user.name;
-            $scope.userdata['email'] = $scope.user.email;
-            $scope.userdata['date'] = $scope.user.date;
-            $scope.userdata['gender'] = $scope.user.gender;
-            $scope.userdata['status'] = $scope.user.status;
-            $scope.userdata['bio'] = $scope.user.bio;
+            $scope.userdata.name = $scope.user.name;
+            $scope.userdata.email = $scope.user.email;
+            $scope.userdata.date = $scope.user.date;
+            $scope.userdata.gender = $scope.user.gender;
+            $scope.userdata.status = $scope.user.status;
+            $scope.userdata.bio = $scope.user.bio;
           });
 
       });

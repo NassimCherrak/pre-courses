@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-$conn = new mysqli("localhost", "root", "", "angusql");
+$conn = new mysqli("localhost", "root", "", "premergency352");
 
 $sql = "SELECT id, title, contentbody, duration, image FROM courses";
 

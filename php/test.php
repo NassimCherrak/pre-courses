@@ -28,12 +28,10 @@ $sql="CREATE TABLE premergency352.user (
 
 $sql2 = "CREATE TABLE premergency352.courses (
 	id INT(11) UNSIGNED AUTO_INCREMENT, 
-	name VARCHAR(30) NOT NULL,
-	email VARCHAR(100),
-	date date,
-	gender ENUM('M','F'),
-	status ENUM('Public','Private'),
-	bio VARCHAR(300),
+	title VARCHAR(100) NOT NULL,
+	contentbody VARCHAR(250),
+	duration INT(10),
+	image VARCHAR(50),
 	PRIMARY KEY (id)
 	);";
 
@@ -46,7 +44,19 @@ $sql3= "CREATE TABLE premergency352.course_taken (
 	FOREIGN KEY (id_user) REFERENCES user(id),
 	FOREIGN KEY (id_course) REFERENCES courses(id)
 );";
-if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE && $conn->query($sql3) === TRUE) {
+
+$sql4 = "INSERT INTO user (name, gender, status)
+		VALUES ('my name', 'M', 'Public');";
+
+$sql5 = "INSERT INTO courses (title, contentbody, duration, image)
+		VALUES ('title of the course', 'long content explaining the course', 8 ,'image1.png');";
+
+if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE && $conn->query($sql3) === TRUE && $conn->query($sql4) === TRUE && $conn->query($sql5) === TRUE) {
+	$conn->query($sql5);
+	$conn->query($sql5);
+	$conn->query($sql5);
+	$conn->query($sql5);
+	$conn->query($sql5);
     echo "Database created successfully";
 } else {
     echo "Error creating database: " . $conn->error;
