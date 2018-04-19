@@ -1,0 +1,124 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Edit my Profile</title>
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="album.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  </head>
+
+  <body ng-app="AApp" ng-controller="ACtrl">
+
+    <header>
+    </header>
+
+    <main role="main">
+
+      <section class="jumbotron text-center" ng-include="'header.html'">
+      </section>
+
+      <selection class="jumbotron text-center">
+        <h3>My Profile</h3>
+      </selection>
+
+      <section class="jumbotron">
+        <div class="container">
+          <form class="form-control" method="POST" action="update_profile.php">
+            <h5>Edit your profile</h5>
+            <hr>
+            <div class="form-group row">
+              <label for="username" class="col-sm-2 col-form-label">Name</label>
+              <div class="col-sm-10">
+                <input type="text" name="name" class="form-control" value="{{ userdata.name }}" maxlength="30" pattern=".{3,}" required title="3 characters minimum">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="email" class="col-sm-2 col-form-label">Email</label>
+              <div class="col-sm-10">
+                <input type="email" name="email" class="form-control" value="{{ userdata.email }}" maxlength="100">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="bday" class="col-sm-2 col-form-label">Date of Birth</label>
+              <div class="col-sm-10">
+                <input type="date" name="date" class="form-control" value="{{ userdata.date }}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="genderSelect" class="col-sm-2 col-form-label">Gender</label>
+              <div class="col-sm-10">
+                <select class="form-control" name="gender" ng-if="userdata.gender == 'M'">
+                  <option value="M" selected>M</option>
+                  <option value="F">F</option>
+                </select>
+                <select class="form-control" name="gender" ng-if="userdata.gender == 'F'">
+                  <option value="M">M</option>
+                  <option value="F" selected>F</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="status" class="col-sm-2 col-form-label">Status</label>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="status" value="Public" ng-checked="userdata.status == 'Public'">
+                  <label class="form-check-label" for="radiopublic">
+                    Public
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="status" value="Private" ng-checked="userdata.status == 'Private'">
+                  <label class="form-check-label" for="radioprivate">
+                    Private
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="bio" class="col-sm-2 col-form-label">Short Bio</label>
+              <div class="form-group col-sm-10">
+                <textarea class="form-control" name="bio" rows="3" maxlength="300">{{ userdata.bio }}</textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary my-2" ng-click="updateUser()">Update Profile</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      var app = angular.module('AApp', []);
+      app.controller('ACtrl', function($scope, $http) {
+        $scope.user = [];
+
+        // load user information
+        $http.get("user.php")
+          .then(function (response) {
+            $scope.user = response.data.records[0];
+            $scope.userdata = [];
+            $scope.userdata['name'] = $scope.user.name;
+            $scope.userdata['email'] = $scope.user.email;
+            $scope.userdata['date'] = $scope.user.date;
+            $scope.userdata['gender'] = $scope.user.gender;
+            $scope.userdata['status'] = $scope.user.status;
+            $scope.userdata['bio'] = $scope.user.bio;
+          });
+
+        $scope.updateUser = function() {
+          console.log($scope.userdata);
+        };
+
+      });
+    </script>
+
+  </body>
+</html>
